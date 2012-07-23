@@ -1,0 +1,6 @@
+QR encoder in Go based on the ZXing encoder (http://code.google.com/p/zxing/).
+
+I was surprised that I couldn't find a QR encoder in Go, especially
+since the example at http://golang.org/doc/effective_go.html#web_server
+is a QR code generator, though the QR encoding is done by an external
+Google service in the example.
