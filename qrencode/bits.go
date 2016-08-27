@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"image"
 	"image/color"
+	"io"
 )
 
 // The test benchmark shows that encoding with boolBitVector/boolBitGrid is
@@ -88,6 +89,38 @@ func (g *BitGrid) String() string {
 		b.WriteString("\n")
 	}
 	return b.String()
+}
+
+// Encode the Grid in ANSI escape sequences and set the background according
+// to the values in the BitGrid surrounded by a white frame
+func (g *BitGrid) TerminalOutput(w io.Writer) {
+	white := "\033[47m  \033[0m"
+	black := "\033[40m  \033[0m"
+	newline := "\n"
+
+	w.Write([]byte(white))
+	for i := 0; i <= g.Width(); i++ {
+		w.Write([]byte(white))
+	}
+	w.Write([]byte(newline))
+
+	for i := 0; i < g.Height(); i++ {
+		w.Write([]byte(white))
+		for j := 0; j < g.Width(); j++ {
+			if g.Get(j, i) {
+				w.Write([]byte(black))
+			} else {
+				w.Write([]byte(white))
+			}
+		}
+		w.Write([]byte(white))
+		w.Write([]byte(newline))
+	}
+	w.Write([]byte(white))
+	for i := 0; i <= g.Width(); i++ {
+		w.Write([]byte(white))
+	}
+	w.Write([]byte(newline))
 }
 
 // Return an image of the grid, with black blocks for true items and
